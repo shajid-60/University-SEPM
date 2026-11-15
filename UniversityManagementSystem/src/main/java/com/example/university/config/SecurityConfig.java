@@ -3,6 +3,7 @@ package com.example.university.config;
 import com.example.university.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,7 +34,11 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/", "/login").permitAll()
                 .requestMatchers("/api/admins/**").hasRole("ADMIN")
                 .requestMatchers("/api/teachers/**").hasAnyRole("ADMIN", "TEACHER")
-                .requestMatchers("/api/students/**").hasAnyRole("ADMIN", "STUDENT")
+                // A student may browse the student directory, but creating, editing
+                // and deleting records is administrative work. The GET rule has to
+                // stay above the catch-all rule for the same path.
+                .requestMatchers(HttpMethod.GET, "/api/students/**").hasAnyRole("ADMIN", "STUDENT")
+                .requestMatchers("/api/students/**").hasRole("ADMIN")
                 .requestMatchers("/dashboard").authenticated()
                 .anyRequest().authenticated())
             .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/dashboard", true).permitAll())
