@@ -44,7 +44,7 @@ class UserRepositoryIntegrationTest {
         assertThat(found.get().getDepartment()).isEqualTo("Computer Science");
 
         // findByEmail must not match an address that was never stored.
-        assertThat(repository.findByEmail("tanvir@university.com")).isEmpty();
+        assertThat(repository.findByEmail("shajid@university.com")).isEmpty();
 
         // findAllByRole must return only the rows of the requested role.
         assertThat(repository.findAllByRole(Role.STUDENT))
