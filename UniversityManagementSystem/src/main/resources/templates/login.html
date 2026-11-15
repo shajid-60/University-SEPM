@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in | UniManage</title><link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="login-page">
+<div class="login-card">
+    <div class="brand-mark">U</div>
+    <p class="eyebrow">UNIVERSITY MANAGEMENT SYSTEM</p>
+    <h1>Welcome back</h1><p class="muted">Sign in to continue to your dashboard.</p>
+    <div class="alert error" th:if="${param.error}">Invalid email or password. Please try again.</div>
+    <div class="alert success" th:if="${param.logout}">You have been logged out successfully.</div>
+    <form th:action="@{/login}" method="post">
+        <label for="username">Email address</label><input id="username" name="username" type="email" placeholder="name@university.com" required autofocus>
+        <label for="password">Password</label><input id="password" name="password" type="password" placeholder="Enter your password" required>
+        <button class="primary-button full-width" type="submit">Sign in <span>→</span></button>
+    </form>
+    <div class="demo-box"><strong>Demo accounts</strong><br>Admin: admin@university.com / admin123<br>Teacher: teacher@university.com / teacher123<br>Student: student@university.com / student123</div>
+    <p class="login-footer">Simple, secure campus management</p>
+</div>
+</body></html>

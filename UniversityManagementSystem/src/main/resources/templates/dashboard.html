@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}"><meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Dashboard | UniManage</title><link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-mark small">U</div><span>UniManage</span></div>
+        <div class="side-label">WORKSPACE</div>
+        <a class="nav-link active" href="/dashboard"><span>▦</span> Dashboard</a>
+        <div class="side-label">MANAGEMENT</div>
+        <button class="nav-link resource-link" data-resource="admins" th:if="${role == 'ADMIN'}"><span>♙</span> Admins</button>
+        <button class="nav-link resource-link" data-resource="teachers" th:if="${role == 'ADMIN' or role == 'TEACHER'}"><span>♧</span> Teachers</button>
+        <button class="nav-link resource-link" data-resource="students" th:if="${role == 'ADMIN' or role == 'STUDENT'}"><span>♧</span> Students</button>
+        <div class="sidebar-bottom"><div class="profile-avatar" th:text="${#strings.substring(displayName,0,1)}">U</div><div class="profile-info"><strong th:text="${displayName}">User</strong><small th:text="${role}">ROLE</small></div><form th:action="@{/logout}" method="post"><button class="logout-button" title="Logout">↗</button></form></div>
+    </aside>
+    <main class="main-content">
+        <header class="topbar"><div><p class="eyebrow">OVERVIEW</p><h1>Dashboard</h1></div><div class="top-user"><span class="status-dot"></span><span th:text="${displayName}">User</span></div></header>
+        <section class="welcome-panel"><div><p class="eyebrow">YOUR WORKSPACE</p><h2>Welcome, <span th:text="${displayName}">User</span>!</h2><p>Manage university records from one simple place.</p></div><div class="welcome-icon">✦</div></section>
+        <section class="stats-grid">
+            <div class="stat-card"><div class="stat-icon blue">♙</div><p>Admins</p><h2 id="adminCount">—</h2></div>
+            <div class="stat-card"><div class="stat-icon purple">♧</div><p>Teachers</p><h2 id="teacherCount">—</h2></div>
+            <div class="stat-card"><div class="stat-icon green">♧</div><p>Students</p><h2 id="studentCount">—</h2></div>
+        </section>
+        <section class="content-card">
+            <div class="section-heading"><div><p class="eyebrow">RECORDS</p><h2 id="tableTitle">Manage records</h2></div><button class="primary-button" id="addButton">＋ Add new</button></div>
+            <div class="toolbar"><div class="search-box">⌕ <input id="searchInput" placeholder="Search by name or email..."></div><span class="record-count" id="recordCount">Loading records...</span></div>
+            <div class="table-wrap"><table><thead><tr><th>NAME</th><th>EMAIL</th><th>DEPARTMENT</th><th>ROLE</th><th class="actions-heading">ACTIONS</th></tr></thead><tbody id="userTable"><tr><td colspan="5" class="empty-state">Loading...</td></tr></tbody></table></div>
+        </section>
+        <p class="page-footer">UniManage · University Management System</p>
+    </main>
+</div>
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal-card"><div class="modal-heading"><div><p class="eyebrow">USER DETAILS</p><h2 id="modalTitle">Add user</h2></div><button class="close-button" id="closeModal">×</button></div>
+        <form id="userForm"><label for="name">Full name</label><input id="name" required placeholder="Enter full name">
+            <label for="email">Email address</label><input id="email" type="email" required placeholder="name@university.com">
+            <label for="department">Department</label><input id="department" placeholder="e.g. Computer Science">
+            <label for="password">Password <span class="optional" id="passwordHint">(required)</span></label><input id="password" type="password" placeholder="Enter password">
+            <p class="form-note" id="formNote">Password will be securely hashed before saving.</p>
+            <div class="modal-actions"><button type="button" class="secondary-button" id="cancelButton">Cancel</button><button type="submit" class="primary-button" id="saveButton">Save user</button></div>
+        </form>
+    </div>
+</div>
+<div class="toast" id="toast"></div>
+<script th:inline="javascript">window.currentRole = /*[[${role}]]*/ 'STUDENT';</script>
+<script src="/js/app.js"></script>
+</body></html>
